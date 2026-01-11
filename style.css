@@ -1,0 +1,95 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;800&display=swap');
+
+body { font-family: 'Inter', sans-serif; }
+
+/* Navigation Glass Effect */
+.glass-nav {
+    background: rgba(255, 255, 255, 0.9);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+}
+
+/* Nav Links */
+.nav-link {
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: #64748b;
+    transition: all 0.2s;
+}
+.nav-link:hover { color: #0f172a; }
+.active-nav-link { color: #2563eb; font-weight: 700; }
+
+/* Input Fields */
+.field label {
+    display: block;
+    font-size: 0.7rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    color: #64748b;
+    margin-bottom: 0.4rem;
+    letter-spacing: 0.02em;
+}
+.field input, .field select {
+    width: 100%;
+    padding: 0.75rem;
+    border: 1px solid #e2e8f0;
+    border-radius: 0.5rem;
+    background: #f8fafc;
+    font-size: 0.95rem;
+    color: #0f172a;
+    outline: none;
+    transition: all 0.2s;
+}
+.field input:focus, .field select:focus {
+    border-color: #2563eb;
+    background: white;
+    box-shadow: 0 0 0 3px rgba(37,99,235,0.1);
+}
+
+/* Tab Buttons */
+.result-tab {
+    padding: 1rem 1.5rem;
+    font-size: 0.8rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    color: #94a3b8;
+    transition: all 0.3s;
+    border-bottom: 2px solid transparent;
+}
+.result-tab:hover { color: white; background: rgba(255,255,255,0.05); }
+.active-tab {
+    color: #60a5fa;
+    border-bottom: 2px solid #60a5fa;
+    background: rgba(37,99,235,0.1);
+}
+
+/* Skill Tags */
+.skill-tag {
+    display: inline-block;
+    padding: 0.35rem 0.85rem;
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: #2563eb; 
+    background-color: #eff6ff;
+    border: 1px solid #dbeafe;
+    border-radius: 9999px;
+    transition: all 0.2s;
+    cursor: default;
+}
+.skill-tag:hover {
+    background-color: #2563eb;
+    color: white;
+    transform: translateY(-2px);
+}
+
+/* Animations */
+@keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+.animate-fade-in { animation: fadeIn 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+
+.no-scrollbar::-webkit-scrollbar {
+    display: none;
+}
+.no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+}

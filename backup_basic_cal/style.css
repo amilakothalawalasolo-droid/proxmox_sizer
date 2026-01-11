@@ -1,0 +1,76 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap');
+
+body {
+    font-family: 'Inter', sans-serif;
+}
+
+/* Custom Input Styling */
+.input-group label {
+    display: block;
+    font-size: 0.75rem; /* text-xs */
+    font-weight: 700;
+    text-transform: uppercase;
+    color: #64748b; /* slate-500 */
+    margin-bottom: 0.5rem;
+    letter-spacing: 0.05em;
+}
+
+.input-group input, 
+.input-group select {
+    width: 100%;
+    padding: 0.75rem;
+    border: 1px solid #e2e8f0;
+    border-radius: 0.75rem; /* rounded-xl */
+    background-color: #f8fafc;
+    font-size: 1rem;
+    color: #0f172a;
+    outline: none;
+    transition: all 0.2s ease-in-out;
+}
+
+.input-group input:focus, 
+.input-group select:focus {
+    border-color: #2563eb; /* blue-600 */
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+    background-color: #ffffff;
+}
+
+/* Result Cards */
+.result-card {
+    background-color: white;
+    padding: 1.5rem;
+    border-radius: 1rem;
+    text-align: center;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+    border: 1px solid #e2e8f0;
+}
+
+.result-card .label {
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    font-weight: 700;
+    color: #94a3b8;
+}
+
+.result-card .value {
+    font-size: 1.875rem; /* 3xl */
+    font-weight: 800;
+    color: #0f172a;
+    margin-top: 0.5rem;
+}
+
+.result-card .subtext {
+    font-size: 0.65rem;
+    color: #64748b;
+    margin-top: 0.25rem;
+}
+
+/* Animation for smooth reveal */
+@keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.animate-fade-in {
+    animation: fadeInUp 0.5s ease-out forwards;
+}

@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Proxmox Architect | Amila Kothalawala</title>
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.tailwindcss.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data: https:;">
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="bg-gray-50 text-slate-800 font-sans antialiased selection:bg-blue-600 selection:text-white">
+
+    <nav class="fixed top-0 w-full z-50 glass-nav border-b border-slate-200/50 transition-all duration-300">
+        <div class="container mx-auto px-4 max-w-6xl">
+            <div class="flex justify-between items-center h-16">
+                
+                <div class="flex items-center cursor-pointer" onclick="navigateTo('home')">
+                    <span class="text-xl font-extrabold text-slate-900 tracking-tight">Proxmox<span class="text-blue-600">Architect</span></span>
+                </div>
+
+                <div class="hidden md:flex space-x-8">
+                    <button onclick="navigateTo('home')" class="nav-link active-nav-link" id="nav-home">Sizer Tool</button>
+                    <button onclick="navigateTo('about')" class="nav-link" id="nav-about">About Me</button>
+                    <button onclick="navigateTo('blog')" class="nav-link hidden">Blog</button> 
+                </div>
+
+                <div class="md:hidden">
+                    <button id="mobileMenuBtn" class="text-slate-900 focus:outline-none p-2">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div id="mobileMenu" class="md:hidden hidden bg-white border-b border-slate-100 absolute w-full left-0 top-16 shadow-lg">
+            <div class="flex flex-col p-4 space-y-4">
+                <button onclick="navigateTo('home')" class="text-left font-medium text-slate-600 py-2">Sizer Tool</button>
+                <button onclick="navigateTo('about')" class="text-left font-medium text-slate-600 py-2">About Me</button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="pt-28 pb-10 container mx-auto px-4 max-w-5xl min-h-screen flex flex-col justify-between">
+        
+        <section id="page-home" class="page-section animate-fade-in">
+            
+            <header class="text-center mb-10">
+                <h1 class="text-3xl md:text-5xl font-extrabold text-slate-900 tracking-tight mb-4">
+                    Architect Your <br class="md:hidden"> <span class="text-blue-600">Infrastructure</span>
+                </h1>
+                <p class="text-slate-500 text-sm md:text-base max-w-2xl mx-auto leading-relaxed">
+                    Professional hardware estimation for Proxmox clusters. 
+                    Engineered with <b>enterprise-grade logic</b> to ensure stability, high availability, and adherence to industry best practices.
+                </p>
+            </header>
+
+            <div class="bg-white rounded-3xl shadow-xl border border-slate-200 overflow-hidden">
+                
+                <div class="bg-slate-50 border-b border-slate-200 flex justify-center p-3">
+                    <div class="bg-white rounded-lg p-1 border border-slate-200 shadow-sm inline-flex">
+                        <button id="modeAvg" class="px-6 py-2 rounded-md text-sm font-bold bg-slate-800 text-white transition-all shadow">
+                            Per VM Average
+                        </button>
+                        <button id="modeTotal" class="px-6 py-2 rounded-md text-sm font-bold text-slate-500 hover:text-slate-800 transition-all">
+                            Total Capacity
+                        </button>
+                    </div>
+                </div>
+
+                <div class="p-6 md:p-10">
+                    <div id="inputContainer" class="space-y-8">
+                        
+                        <div id="inputsAvg" class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                            <div class="group-box">
+                                <h3 class="section-title text-blue-600 font-bold mb-4 uppercase text-xs tracking-wider">Virtual Machines</h3>
+                                <div class="space-y-4">
+                                    <div class="field"><label>Count</label><input type="number" id="vmCount" placeholder="0"></div>
+                                    <div class="field"><label>vCPU per VM</label><input type="number" id="vmCpu" placeholder="0"></div>
+                                    <div class="field"><label>RAM per VM (GB)</label><input type="number" id="vmRam" placeholder="0"></div>
+                                    <div class="field"><label>Storage per VM (GB)</label><input type="number" id="vmStore" placeholder="0"></div>
+                                </div>
+                            </div>
+                            <div class="group-box">
+                                <h3 class="section-title text-emerald-600 font-bold mb-4 uppercase text-xs tracking-wider">LXC Containers</h3>
+                                <div class="space-y-4">
+                                    <div class="field"><label>Count</label><input type="number" id="lxcCount" placeholder="0"></div>
+                                    <div class="field"><label>vCPU per LXC</label><input type="number" id="lxcCpu" placeholder="0"></div>
+                                    <div class="field"><label>RAM per LXC (GB)</label><input type="number" id="lxcRam" placeholder="0"></div>
+                                    <div class="field"><label>Storage per LXC (GB)</label><input type="number" id="lxcStore" placeholder="0"></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div id="inputsTotal" class="hidden bg-slate-50 p-8 rounded-xl border border-slate-200 text-center">
+                            <p class="text-sm text-slate-500 mb-6 font-medium">Enter the aggregate resources required for the entire project.</p>
+                            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                                <div class="field"><label>Total vCPU Needed</label><input type="number" id="totVcpu" placeholder="Total vCores"></div>
+                                <div class="field"><label>Total RAM Needed (GB)</label><input type="number" id="totRam" placeholder="Total GB"></div>
+                                <div class="field"><label>Total Storage Needed (TB)</label><input type="number" id="totStore" placeholder="Total TB"></div>
+                            </div>
+                        </div>
+
+                        <div class="pt-8 border-t border-slate-100">
+                            <h3 class="text-sm font-bold text-slate-900 uppercase mb-6 tracking-wide">Infrastructure Strategy</h3>
+                            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                                <div class="field">
+                                    <label>Storage Backend</label>
+                                    <select id="storageType">
+                                        <option value="lvm">LVM-Thin (Local / Simple)</option>
+                                        <option value="zfs">ZFS (Local / Reliable)</option>
+                                        <option value="ceph">Ceph (HCI Cluster)</option>
+                                    </select>
+                                </div>
+                                <div class="field">
+                                    <label>Redundancy Strategy</label>
+                                    <select id="haMode">
+                                        <option value="none">Standalone (Non-Critical)</option>
+                                        <option value="n1">High Availability (N+1)</option>
+                                    </select>
+                                </div>
+                                <div class="field">
+                                    <label>Target Node Count</label>
+                                    <input type="number" id="nodeCount" min="1" value="1">
+                                </div>
+                            </div>
+
+                            <div class="mt-8">
+                                <div class="flex justify-between mb-2">
+                                    <label class="text-xs font-bold text-slate-500 uppercase">Growth Buffer (Safety Margin)</label>
+                                    <span id="bufferVal" class="text-xs font-bold text-blue-600">20%</span>
+                                </div>
+                                <input type="range" id="growthBuffer" min="0" max="50" value="20" class="w-full accent-blue-600 h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer">
+                            </div>
+                        </div>
+
+                        <button id="btnCalc" class="w-full bg-slate-900 hover:bg-blue-600 text-white font-bold py-4 rounded-xl shadow-lg transition-transform active:scale-[0.98] text-lg">
+                            Calculate Architecture
+                        </button>
+                    </div>
+                </div>
+                
+                <div id="resultsArea" class="hidden bg-slate-900 text-white transition-all duration-500">
+                    <div class="flex border-b border-slate-700 overflow-x-auto no-scrollbar">
+                        <button class="result-tab active-tab text-blue-400 border-blue-400 whitespace-nowrap" onclick="switchTab(event, 'tabSpecs')">Hardware Specs</button>
+                        <button class="result-tab whitespace-nowrap" onclick="switchTab(event, 'tabInfra')">Infra & Network</button>
+                        <button class="result-tab whitespace-nowrap" onclick="switchTab(event, 'tabReport')">Architect Report</button>
+                    </div>
+
+                    <div id="tabSpecs" class="tab-content p-8 block animate-fade-in">
+                        <h3 class="text-blue-400 font-bold uppercase text-xs mb-8 tracking-widest">Recommended Per-Node Configuration</h3>
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 text-center">
+                            <div class="bg-slate-800 p-6 rounded-2xl border border-slate-700 hover:border-blue-500/50 transition">
+                                <div class="text-xs text-slate-400 uppercase font-bold">RAM per Node</div>
+                                <div class="text-4xl font-extrabold text-white mt-3" id="resRam">0 GB</div>
+                                <div class="text-xs text-slate-500 mt-2">ECC Memory Recommended</div>
+                            </div>
+                            <div class="bg-slate-800 p-6 rounded-2xl border border-slate-700 hover:border-blue-500/50 transition">
+                                <div class="text-xs text-slate-400 uppercase font-bold">CPU per Node</div>
+                                <div class="text-4xl font-extrabold text-white mt-3" id="resCpu">0 Threads</div>
+                                <div class="text-xs text-slate-500 mt-2">Physical Cores/Threads</div>
+                            </div>
+                            <div class="bg-slate-800 p-6 rounded-2xl border border-slate-700 hover:border-blue-500/50 transition">
+                                <div class="text-xs text-slate-400 uppercase font-bold">Usable Storage</div>
+                                <div class="text-4xl font-extrabold text-white mt-3" id="resStore">0 TB</div>
+                                <div class="text-xs text-slate-500 mt-2">NVMe / SSD Recommended</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="tabInfra" class="tab-content p-8 hidden animate-fade-in">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div class="infra-item p-5 bg-white/5 rounded-xl border border-white/10">
+                                <h4 class="font-bold text-white mb-2 flex items-center gap-2">🌐 Networking Strategy</h4>
+                                <p id="infraNet" class="text-sm text-slate-300 leading-relaxed"></p>
+                            </div>
+                            <div class="infra-item p-5 bg-white/5 rounded-xl border border-white/10">
+                                <h4 class="font-bold text-white mb-2 flex items-center gap-2">💽 Boot / OS Drives</h4>
+                                <p class="text-sm text-slate-300 leading-relaxed">
+                                    Use <b>2x Enterprise SSDs</b> (min 240GB) in <b>RAID-1 (Mirror)</b> specifically for Proxmox OS. <br>
+                                    <span class="text-xs text-slate-500 block mt-1">⚠️ Do not install OS on Data drives (Ceph/ZFS).</span>
+                                </p>
+                            </div>
+                            <div class="infra-item p-5 bg-white/5 rounded-xl border border-white/10">
+                                <h4 class="font-bold text-white mb-2 flex items-center gap-2">🛡️ Backup Solution</h4>
+                                <p class="text-sm text-slate-300 leading-relaxed">
+                                    Deploy a separate <b>Proxmox Backup Server (PBS)</b>. <br>
+                                    Follow the <b>3-2-1 Rule</b>: 3 Copies, 2 Media Types, 1 Offsite.
+                                </p>
+                            </div>
+                            <div class="infra-item p-5 bg-white/5 rounded-xl border border-white/10">
+                                <h4 class="font-bold text-white mb-2 flex items-center gap-2">⚡ Power & HA Logic</h4>
+                                <p id="infraPower" class="text-sm text-slate-300 leading-relaxed"></p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="tabReport" class="tab-content p-8 hidden animate-fade-in">
+                        <h3 class="text-purple-400 font-bold uppercase text-xs mb-4 tracking-widest">Architect's Summary</h3>
+                        <div id="reportText" class="text-sm text-slate-300 leading-relaxed space-y-4"></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+
+        <section id="page-about" class="page-section hidden animate-fade-in">
+            <div class="max-w-5xl mx-auto space-y-8">
+                
+                <div class="bg-white rounded-3xl shadow-xl border border-slate-200 overflow-hidden">
+                    <div class="md:flex">
+                        <div class="md:w-1/3 bg-slate-900 p-8 text-white flex flex-col items-center text-center justify-center relative overflow-hidden">
+                            <div class="absolute inset-0 opacity-10 bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')]"></div>
+                            
+                            <div class="w-32 h-32 rounded-full border-4 border-blue-500 shadow-2xl overflow-hidden mb-6 relative z-10 bg-slate-800 flex items-center justify-center text-5xl">
+                                👨‍💻
+                            </div>
+                            
+                            <h2 class="text-2xl font-bold">Amila Kothalawala</h2>
+                            <p class="text-blue-400 font-medium text-xs mt-1 uppercase tracking-wider">Freelance Tech Architect</p>
+                            
+                            <div class="mt-8 space-y-3 w-full relative z-10">
+                                <a href="https://www.amilakothalawala.work" target="_blank" class="block w-full py-2.5 px-4 bg-blue-600 hover:bg-blue-500 rounded-lg text-xs font-bold transition flex items-center justify-center gap-2 shadow-lg">
+                                    <span>🌐</span> Visit Website
+                                </a>
+                                <a href="https://www.linkedin.com/in/amila-kothalawala/" target="_blank" class="block w-full py-2.5 px-4 bg-[#0077b5] hover:bg-[#006396] rounded-lg text-xs font-bold transition flex items-center justify-center gap-2 shadow-lg">
+                                    <span>in</span> Connect on LinkedIn
+                                </a>
+                            </div>
+                        </div>
+
+                        <div class="md:w-2/3 p-8 md:p-12">
+                            <h3 class="text-3xl font-extrabold text-slate-900 mb-4">Bridging Silicon & Strategy</h3>
+                            <div class="space-y-4 text-slate-600 leading-relaxed text-sm">
+                                <p>
+                                    Hi, I’m <b>Amila Kothalawala</b>. A seasoned professional with over <b>13 years of expertise</b> in Linux, Open-Source Solutions, and Security, combined with more than 5 years in Digital Marketing and Product Photography.
+                                </p>
+                                <p>
+                                    I don't just build servers; I engineer solutions. Whether it's architecting a secure <b>Proxmox Cluster</b> or crafting a digital strategy, my unique combination of technical knowledge and creative skills allows me to deliver innovative solutions that empower businesses.
+                                </p>
+                                <p>
+                                    I built this <b>Sizer Tool</b> to solve a common problem: helping professionals correctly size Proxmox hardware by accounting for hidden overheads like ZFS ARC and Ceph rebalancing.
+                                </p>
+                            </div>
+                            
+                            <div class="grid grid-cols-3 gap-4 mt-8 pt-8 border-t border-slate-100">
+                                <div class="text-center">
+                                    <span class="block text-2xl font-bold text-slate-900">13+</span>
+                                    <span class="text-[10px] text-slate-500 uppercase font-bold tracking-wide">Years Tech Exp</span>
+                                </div>
+                                <div class="text-center">
+                                    <span class="block text-2xl font-bold text-slate-900">5+</span>
+                                    <span class="text-[10px] text-slate-500 uppercase font-bold tracking-wide">Years Creative</span>
+                                </div>
+                                <div class="text-center">
+                                    <span class="block text-2xl font-bold text-slate-900">100%</span>
+                                    <span class="text-[10px] text-slate-500 uppercase font-bold tracking-wide">Open Source</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    
+                    <div class="bg-white p-8 rounded-3xl shadow-lg border border-slate-200 hover:shadow-xl transition-shadow">
+                        <div class="flex items-center gap-3 mb-6">
+                            <div class="p-3 bg-blue-100 text-blue-600 rounded-xl">⚙️</div>
+                            <h4 class="text-lg font-bold text-slate-900">Linux & Security</h4>
+                        </div>
+                        <p class="text-xs text-slate-500 mb-6 leading-relaxed">
+                            Specializing in system hardening, network monitoring, and cost-effective open-source infrastructure.
+                        </p>
+                        <div class="flex flex-wrap gap-2">
+                            <span class="skill-tag">Proxmox VE</span>
+                            <span class="skill-tag">Linux Hardening</span>
+                            <span class="skill-tag">Docker / K8s</span>
+                            <span class="skill-tag">pfSense</span>
+                            <span class="skill-tag">ELK Stack</span>
+                            <span class="skill-tag">WireGuard</span>
+                            <span class="skill-tag">ZFS</span>
+                        </div>
+                    </div>
+
+                    <div class="bg-white p-8 rounded-3xl shadow-lg border border-slate-200 hover:shadow-xl transition-shadow">
+                        <div class="flex items-center gap-3 mb-6">
+                            <div class="p-3 bg-purple-100 text-purple-600 rounded-xl">📸</div>
+                            <h4 class="text-lg font-bold text-slate-900">Digital & Creative</h4>
+                        </div>
+                        <p class="text-xs text-slate-500 mb-6 leading-relaxed">
+                            Enhancing online presence through data-driven marketing, e-commerce strategies, and visual storytelling.
+                        </p>
+                        <div class="flex flex-wrap gap-2">
+                            <span class="skill-tag bg-purple-50 text-purple-700 border-purple-100">Digital Marketing</span>
+                            <span class="skill-tag bg-purple-50 text-purple-700 border-purple-100">Product Photography</span>
+                            <span class="skill-tag bg-purple-50 text-purple-700 border-purple-100">E-Commerce</span>
+                            <span class="skill-tag bg-purple-50 text-purple-700 border-purple-100">Branding</span>
+                            <span class="skill-tag bg-purple-50 text-purple-700 border-purple-100">Videography</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-gradient-to-br from-slate-900 to-slate-800 rounded-3xl p-10 md:p-14 text-center text-white shadow-2xl relative overflow-hidden">
+                    <div class="relative z-10">
+                        <h3 class="text-2xl md:text-3xl font-bold mb-4">Let’s Work Together</h3>
+                        <p class="text-slate-300 mb-8 max-w-2xl mx-auto text-sm leading-relaxed">
+                            Whether you need to secure your IT infrastructure, build a scalable Proxmox cluster, or grow your digital presence, I’m here to help turn your vision into reality.
+                        </p>
+                        <a href="https://www.amilakothalawala.work" target="_blank" class="inline-block bg-blue-600 hover:bg-blue-500 text-white font-bold py-3 px-8 rounded-xl transition-transform hover:scale-105 shadow-lg shadow-blue-600/30">
+                            Contact Me
+                        </a>
+                    </div>
+                    <div class="absolute -top-24 -right-24 w-64 h-64 bg-white opacity-5 rounded-full blur-3xl"></div>
+                    <div class="absolute -bottom-24 -left-24 w-64 h-64 bg-blue-500 opacity-10 rounded-full blur-3xl"></div>
+                </div>
+
+            </div>
+        </section>
+
+
+        <section id="page-legal" class="page-section hidden animate-fade-in">
+            <div class="max-w-4xl mx-auto bg-white rounded-3xl shadow-xl border border-slate-200 p-10">
+                <h2 class="text-2xl font-bold mb-6 text-slate-900">Privacy Policy & Terms</h2>
+                <div class="text-sm text-slate-600 space-y-6 leading-relaxed">
+                    <div>
+                        <h4 class="font-bold text-slate-900 mb-2">1. No Data Collection</h4>
+                        <p>This tool functions entirely as a client-side application running in your web browser. No data you enter (such as VM counts, specifications, or infrastructure details) is transmitted to, stored on, or processed by any external server. Your privacy is protected by the architecture of the application.</p>
+                    </div>
+                    <div>
+                        <h4 class="font-bold text-slate-900 mb-2">2. Disclaimer of Warranty</h4>
+                        <p>The calculations provided by this tool are estimates based on standard Proxmox VE, ZFS, and Ceph best practices as of 2026. Real-world requirements may vary based on specific hardware components, workload types, and software versions. The creator (Amila Kothalawala) assumes no liability for hardware purchases made based on these estimations.</p>
+                    </div>
+                    <div>
+                        <h4 class="font-bold text-slate-900 mb-2">3. Usage Rights</h4>
+                        <p>You are free to use this tool for personal, educational, and commercial planning purposes.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <footer class="mt-12 border-t border-slate-200 pt-8">
+            <div class="flex flex-col md:flex-row justify-between items-center gap-4 text-center md:text-left">
+                <p class="text-xs text-slate-500">
+                    © 2026 Designed by <a href="https://www.amilakothalawala.work" class="font-bold text-blue-600 hover:underline">Amila Kothalawala</a>.
+                </p>
+                <div class="flex space-x-6 text-xs font-medium text-slate-500">
+                    <button onclick="navigateTo('legal')" class="hover:text-blue-600 transition">Privacy Policy</button>
+                    <button onclick="navigateTo('legal')" class="hover:text-blue-600 transition">Terms of Service</button>
+                </div>
+            </div>
+        </footer>
+
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
