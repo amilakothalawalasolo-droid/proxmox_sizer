@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://proxmoxsizer.amilakothalawala.work/sitemap.xml
